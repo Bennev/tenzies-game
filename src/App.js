@@ -11,6 +11,7 @@ export default function App() {
     const [tenzies, setTenzies] = React.useState(false)
     const [countNumberRoll, setCountNumberRoll] = React.useState(0)
     // const [timer, setTimer] = React.useState(0)
+    // const [paused, setPaused] = React.useState(false)
 
     // React.useEffect (() => {
     //     const intervalId = setInterval(updateTimer, 1000)
@@ -24,12 +25,12 @@ export default function App() {
         const allSameValue = dice.every(die => die.value === firstValue)
         if (allHeld && allSameValue) {
             setTenzies(true)
+            // setTimer(timer)
         }
     }, [dice])
 
     // const updateTimer = React.useCallback(() => {
-    //   setTimer(timer + 1)
-    //   console.log(timer)
+    //     setTimer((prevState) => prevState + 1)
     // }, [timer])
 
     function generateNewDie() {
@@ -50,16 +51,17 @@ export default function App() {
     
     function rollDice() {
       if(!tenzies) {
-          setCountNumberRoll(countNumberRoll + 1)
-          setDice(oldDice => oldDice.map(die => {
-              return die.isHeld ? 
-                  die :
-                  generateNewDie()
-          }))
+            setCountNumberRoll(countNumberRoll + 1)
+            setDice(oldDice => oldDice.map(die => {
+                return die.isHeld ? 
+                    die :
+                    generateNewDie()
+            }))
       } else {
-          setCountNumberRoll(0)
-          setTenzies(false)
-          setDice(allNewDice())
+            // setTimer(0)
+            setCountNumberRoll(0)
+            setTenzies(false)
+            setDice(allNewDice())
       }
     }
     
@@ -93,7 +95,7 @@ export default function App() {
             </div>
             <div className="statistics">
                 <p>{`Number of Rolls: ${countNumberRoll}`}</p>
-                {/* <p>{`Timer: ${timer}`}</p> */}
+                {/* <p>{`Timer: ${timer} seg`}</p> */}
             </div>
             <button 
                 className="roll-dice" 
