@@ -22,12 +22,12 @@ Create a Tenzies Game using ReactJS framework and its functionalities
 
 ### Screenshot
 
-<!-- ![screenshot](/public/images/screenshot.png) -->
+![screenshot](/public/images/screenshot.png)
 
 ### Links
 
-<!-- - Live Site URL: [@Netlify](https://meme-generator-bennev.netlify.app/)
-  [![Netlify Status](https://api.netlify.com/api/v1/badges/3236f6f0-8c1e-483c-93db-42ffcec40c95/deploy-status)](https://app.netlify.com/sites/meme-generator-bennev/deploys) -->
+- Live Site URL: [@Netlify](https://tenzies-game-bennev.netlify.app/)
+  [![Netlify Status](https://api.netlify.com/api/v1/badges/694647d9-c0f4-41b5-bc0d-2677d9e1b3e0/deploy-status)](https://app.netlify.com/sites/tenzies-game-bennev/deploys)
 - Solution URL: [@GitHub](https://github.com/Bennev/tenzies-game)
 
 ### Getting Started with Create React App

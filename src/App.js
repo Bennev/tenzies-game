@@ -21,6 +21,8 @@ export default function App() {
     )
     const [start, setStart] = React.useState(true)
 
+    console.log(bestRolls)
+    
     React.useEffect(() => {
         let interval = null;
         if (start) {
@@ -138,7 +140,10 @@ export default function App() {
                     {tenzies ? "New Game" : "Roll"}
                 </button>
 
-                <Scoreboard bestRolls={bestRolls} bestTime={bestTime} />
+                <Scoreboard
+                bestRolls={bestRolls}
+                bestTime={bestTime}
+                />
             </main>
             <Footer />
         </div>
