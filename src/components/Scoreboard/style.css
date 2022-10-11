@@ -1,0 +1,13 @@
+.rolls-best,
+.time-best {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-weight: bold;
+  color: #2b283a;
+}
+
+.rolls-best > p:last-child,
+.time-best > p:last-child {
+  margin-block: 0.5em;
+}

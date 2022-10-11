@@ -1,23 +1,37 @@
 import './App.css';
 
-import React, { useCallback } from "react"
+import React from "react"
 import Die from "./components/Die"
+import Footer from "./components/Footer"
+import Scoreboard from './components/Scoreboard';
 import {nanoid} from "nanoid"
-import Confetti from "react-confetti"
+import ReactConfetti from "react-confetti"
 
 export default function App() {
 
     const [dice, setDice] = React.useState(allNewDice())
     const [tenzies, setTenzies] = React.useState(false)
-    const [countNumberRoll, setCountNumberRoll] = React.useState(0)
-    // const [timer, setTimer] = React.useState(0)
-    // const [paused, setPaused] = React.useState(false)
+    const [rolls, setRolls] = React.useState(0)
+    const [bestRolls, setBestRolls] = React.useState(
+        JSON.parse(localStorage.getItem("bestRolls")) || 0
+    )
+    const [time, setTime] = React.useState(0)
+    const [bestTime, setBestTime] = React.useState(
+        JSON.parse(localStorage.getItem("bestTime")) || 0
+    )
+    const [start, setStart] = React.useState(true)
 
-    // React.useEffect (() => {
-    //     const intervalId = setInterval(updateTimer, 1000)
-
-    //     return () => clearInterval(intervalId)
-    // }, [])
+    React.useEffect(() => {
+        let interval = null;
+        if (start) {
+            interval = setInterval(() => {
+                setTime((prevTime) => prevTime + 10)
+            }, 10)
+        } else {
+            clearInterval(interval)
+        }
+        return () => clearInterval(interval)
+    }, [start])
 
     React.useEffect(() => {
         const allHeld = dice.every(die => die.isHeld)
@@ -25,13 +39,29 @@ export default function App() {
         const allSameValue = dice.every(die => die.value === firstValue)
         if (allHeld && allSameValue) {
             setTenzies(true)
-            // setTimer(timer)
+            setStart(false)
+            setRecords()
         }
     }, [dice])
 
-    // const updateTimer = React.useCallback(() => {
-    //     setTimer((prevState) => prevState + 1)
-    // }, [timer])
+    function setRecords() {
+        if (!bestRolls || rolls < bestRolls) {
+            setBestRolls(rolls)
+        }
+        
+        const timeFloored = Math.floor(time/10)
+        if (!bestTime || timeFloored < bestTime) {
+            setBestTime(timeFloored)
+        }
+    }
+
+    React.useEffect(() => {
+        localStorage.setItem("bestRolls", JSON.stringify(bestRolls));
+      }, [bestRolls])
+
+    React.useEffect(() => {
+    localStorage.setItem("bestTime", JSON.stringify(bestTime));
+    }, [bestTime])
 
     function generateNewDie() {
         return {
@@ -51,17 +81,18 @@ export default function App() {
     
     function rollDice() {
       if(!tenzies) {
-            setCountNumberRoll(countNumberRoll + 1)
-            setDice(oldDice => oldDice.map(die => {
-                return die.isHeld ? 
-                    die :
-                    generateNewDie()
-            }))
+        setDice(oldDice => oldDice.map(die => {
+            return die.isHeld ? 
+            die :
+            generateNewDie()
+        }))
+        setRolls(rolls + 1)
       } else {
-            // setTimer(0)
-            setCountNumberRoll(0)
-            setTenzies(false)
-            setDice(allNewDice())
+        setTenzies(false)
+        setDice(allNewDice())
+        setRolls(0)
+        setStart(true)
+        setTime(0)
       }
     }
     
@@ -83,26 +114,33 @@ export default function App() {
     ))
     
     return (
-        <main>
-            {tenzies && <Confetti width={window.innerWidth} height={window.innerHeight}/>}
-            <h1 className="title">Tenzies</h1>
-            <div className="instructions">
-                <p>Role os dados até que os valores sejam os mesmos.</p>
-                <p>Clique em cada dado para congelar seu valor durante as rolagens.</p>
-            </div>
-            <div className="dice-container">
-                {diceElements}
-            </div>
-            <div className="statistics">
-                <p>{`Number of Rolls: ${countNumberRoll}`}</p>
-                {/* <p>{`Timer: ${timer} seg`}</p> */}
-            </div>
-            <button 
-                className="roll-dice" 
-                onClick={rollDice}
-            >
-                {tenzies ? "New Game" : "Roll"}
-            </button>
-        </main>
+        <div>
+            <main>
+                {tenzies && <ReactConfetti />}
+                <h1 className="title">TENZIES</h1>
+                {tenzies ? <p className="winner gradient-text">YOU WON!</p> : (
+                    <p className="instructions">
+                        Roll until all dice are the same.
+                        <br /> Click each die to freeze it at its current value between rolls.
+                    </p>
+                )}
+                <div className="statistics">
+                    <p>{`Rolls: ${rolls}`}</p>
+                    <p>Timer: {("0" + Math.floor((time / 1000) % 60)).slice(-2)}:{("0" + ((time / 10) % 1000)).slice(-2)}</p>
+                </div>
+                <div className="dice-container">
+                    {diceElements}
+                </div>
+                <button 
+                    className="roll-dice" 
+                    onClick={rollDice}
+                >
+                    {tenzies ? "New Game" : "Roll"}
+                </button>
+
+                <Scoreboard bestRolls={bestRolls} bestTime={bestTime} />
+            </main>
+            <Footer />
+        </div>
     )
 }
