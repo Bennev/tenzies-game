@@ -9,7 +9,7 @@ export default function Footer() {
         Coded by{" "}
         <a
           className="footer-link underline-animation"
-          href="https://www.linkedin.com/in/mbmilitao/"
+          href="https://www.linkedin.com/in/matheusbenevidesmilitao"
           target="_blank"
         >
           Matheus Benevides Militão  
